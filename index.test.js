@@ -46,4 +46,11 @@ describe('pureMutation', () => {
 
     expect(stub).to.have.been.calledWith(sinon.match((data) => data !== user))
   })
+
+  it('is curried', () => {
+    const mutate = pureMutation(user)
+
+    mutate(({ name }) => ({ name }))
+    expect(user).to.eql({ name: 'Jon' })
+  })
 })

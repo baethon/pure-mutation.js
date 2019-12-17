@@ -1,4 +1,18 @@
-function pureMutation (/* object, fn */) {
-}
+const difference = require('lodash.difference')
 
-module.exports = pureMutation
+/**
+ * Mutates received object using pure function
+ *
+ * @param {Object} object
+ * @param {Function} fn
+ */
+module.exports = function pureMutation (object, fn) {
+  const newObject = fn({ ...object })
+  const diff = difference(Object.keys(object), Object.keys(newObject))
+
+  Object.assign(object, newObject)
+
+  diff.forEach(keyName => {
+    delete object[keyName]
+  })
+}

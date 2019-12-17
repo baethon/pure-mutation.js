@@ -1,5 +1,4 @@
 const difference = require('lodash.difference')
-const curry = require('lodash.curry')
 
 /**
  * Mutates received object using pure function
@@ -18,4 +17,4 @@ function pureMutation (object, fn) {
   })
 }
 
-module.exports = curry(pureMutation)
+module.exports = pureMutation

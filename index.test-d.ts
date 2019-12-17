@@ -1,3 +1,3 @@
-import pureMutation from '.';
+import { mutate } from '.';
 
-pureMutation({ name: 'Jon' }, (data: Object) => data);
+mutate({ name: 'Jon' }, (data: Object) => data);

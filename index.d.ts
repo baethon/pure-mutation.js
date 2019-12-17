@@ -1,11 +1,12 @@
-declare const pureMutation: {
+declare namespace pureMutation {
+
   /**
-   * Mutate the input object using given pure function
-   *
-   * @param input - object to be mutated
-   * @param fn - pure function which will mutate the object
+   * Mutate input using given pure function
+   * 
+   * @param input
+   * @param using
    */
-  (input: Object, fn: Function): void;
-};
+  export function mutate(input: Object, using: Function): void;
+}
 
 export = pureMutation;

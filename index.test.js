@@ -1,12 +1,12 @@
 const chai = require('chai')
 const { describe, it, beforeEach } = require('mocha')
 const sinon = require('sinon')
-const pureMutation = require('.')
+const { mutate } = require('.')
 
 chai.use(require('sinon-chai'))
 const { expect } = chai
 
-describe('pureMutation', () => {
+describe('@baethon/pure-mutation', () => {
   let user
 
   beforeEach(() => {
@@ -17,33 +17,35 @@ describe('pureMutation', () => {
     }
   })
 
-  it('mutates existing properties', () => {
-    pureMutation(user, (data) => ({
-      ...data,
-      familyName: 'King of the north'
-    }))
+  describe('mutate()', () => {
+    it('mutates existing properties', () => {
+      mutate(user, (data) => ({
+        ...data,
+        familyName: 'King of the north'
+      }))
 
-    expect(user).to.have.property('familyName', 'King of the north')
-  })
+      expect(user).to.have.property('familyName', 'King of the north')
+    })
 
-  it('appends new keys', () => {
-    pureMutation(user, (data) => ({
-      ...data,
-      king: true
-    }))
+    it('appends new keys', () => {
+      mutate(user, (data) => ({
+        ...data,
+        king: true
+      }))
 
-    expect(user).to.have.property('king', true)
-  })
+      expect(user).to.have.property('king', true)
+    })
 
-  it('removes deleted keys', () => {
-    pureMutation(user, ({ familyName, ...data }) => data)
-    expect(user).not.to.have.property('familyName')
-  })
+    it('removes deleted keys', () => {
+      mutate(user, ({ familyName, ...data }) => data)
+      expect(user).not.to.have.property('familyName')
+    })
 
-  it('passes new ref to callback', () => {
-    const stub = sinon.stub().returns({ name: 'Jon' })
-    pureMutation(user, stub)
+    it('passes new ref to callback', () => {
+      const stub = sinon.stub().returns({ name: 'Jon' })
+      mutate(user, stub)
 
-    expect(stub).to.have.been.calledWith(sinon.match((data) => data !== user))
+      expect(stub).to.have.been.calledWith(sinon.match((data) => data !== user))
+    })
   })
 })

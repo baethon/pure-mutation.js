@@ -6,7 +6,7 @@ const difference = require('lodash.difference')
  * @param {Object} object
  * @param {Function} fn
  */
-function pureMutation (object, fn) {
+function mutate (object, fn) {
   const newObject = fn({ ...object })
   const diff = difference(Object.keys(object), Object.keys(newObject))
 
@@ -17,4 +17,6 @@ function pureMutation (object, fn) {
   })
 }
 
-module.exports = pureMutation
+module.exports = {
+  mutate
+}

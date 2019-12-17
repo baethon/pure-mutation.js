@@ -11,7 +11,20 @@ yarn add @baethon/pure-mutation
 ## Example usage
 
 ```js
-const { mutate } = require('@baethon/pure-mutation')const R = require('ramda')const incrementAge = R.evolve({    age: R.inc})const user = {    name: 'Jon',    age: 22}mutate(user, incrementAge)console.log(user)
+const { mutate } = require('@baethon/pure-mutation')
+const R = require('ramda')
+
+const incrementAge = R.evolve({    
+  age: R.inc
+})
+
+const user = {    
+  name: 'Jon',    
+  age: 22
+}
+
+mutate(user, incrementAge)
+console.log(user)
 ```
 
 ## But... why?
@@ -27,7 +40,9 @@ Some libraries require that a given callback mutates the input data. Now, imagin
 [Mongoose middleware](https://mongoosejs.com/docs/middleware.html) can be used to ie. modify the data which will be returned from the database. To do this, one needs to add a _pre init_ hook. Unfortunately, this hook has to mutate the input object.
 
 ```js
-schema.pre('init', (doc) => {    delete doc.password})
+schema.pre('init', (doc) => {    
+  delete doc.password
+})
 ```
 
 If a hook returns some data it won't be considered.
@@ -39,7 +54,8 @@ schema.pre('init', R.omit(['password']))
 The solution? Make it unpure!
 
 ```js
-const { unpure } = require('@baethon/pure-mutation')schema.pre('init', unpure(R.omit(['password'])))
+const { unpure } = require('@baethon/pure-mutation')
+schema.pre('init', unpure(R.omit(['password'])))
 ```
 
 ## How it works

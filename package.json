@@ -20,6 +20,7 @@
     "standard": "^14.3.1"
   },
   "dependencies": {
+    "lodash.curry": "^4.1.1",
     "lodash.difference": "^4.5.0"
   },
   "husky": {

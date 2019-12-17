@@ -1,3 +1,7 @@
-import { mutate } from '.';
+import { mutate, unpure } from '.';
 
-mutate({ name: 'Jon' }, (data: Object) => data);
+const pureFn = ({ name } : { name: String }) => ({ name });
+const wrapper = unpure(pureFn);
+
+mutate({ name: 'Jon' }, pureFn);
+wrapper({ name: 'Jon' });

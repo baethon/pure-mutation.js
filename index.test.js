@@ -1,7 +1,7 @@
 const chai = require('chai')
 const { describe, it, beforeEach } = require('mocha')
 const sinon = require('sinon')
-const { mutate } = require('.')
+const { mutate, unpure } = require('.')
 
 chai.use(require('sinon-chai'))
 const { expect } = chai
@@ -46,6 +46,18 @@ describe('@baethon/pure-mutation', () => {
       mutate(user, stub)
 
       expect(stub).to.have.been.calledWith(sinon.match((data) => data !== user))
+    })
+  })
+
+  describe('unpure()', () => {
+    it('converts pure function to non-pure function', () => {
+      const fn = unpure(({ name }) => ({ name }))
+
+      fn(user)
+
+      expect(user).to.eql({
+        name: 'Jon'
+      })
     })
   })
 })

@@ -14,6 +14,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
     "mocha": "^6.2.2",
     "sinon": "^7.5.0",
     "sinon-chai": "^3.3.0",
@@ -25,7 +26,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run lint"
+      "pre-commit": "lint-staged"
     }
   },
   "files": [
@@ -36,5 +37,10 @@
     "compilerOptions": {
       "esModuleInterop": true
     }
+  },
+  "lint-staged": {
+    "*.js": [
+      "npm run lint:fix"
+    ]
   }
 }

@@ -11,7 +11,7 @@ declare namespace pureMutation {
     exclude?: (inputRef: Object, keys: String[]) => void;
   }
 
-  type NonPureFn = (input: Object, mutatorOps?: MutatorOps) => void;
+  type NonPureFn = (input: Object) => void;
 
   /**
    * Mutate input using given pure function

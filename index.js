@@ -9,7 +9,6 @@ const difference = require('lodash.difference')
 /**
  * @callback NonPureFn
  * @param {Object} inputRef
- * @param {MutatorOps} [mutatorOps]
  * @return {void}
  */
 

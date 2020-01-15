@@ -64,6 +64,31 @@ Both `mutate` and `unpure` methods will create a wrapper around the pure functio
 
 The wrapper makes a diff of the keys. If the returned value has some keys missing they will be removed from the input object.
 
+## Custom mutators
+
+It is possible to define custom mutators for selected operations:
+
+- `assign` to assign new values to the input object
+
+- `exclude` to remove the properties that are no longer present in the result of the applied function
+
+This can be used to set values in a non-plain objects (eg. Mongoose models).
+
+```js
+const { mutate } = require('@baethon/pure-mutation')
+const User = require('./model/user')
+
+const pluckName = ({ name }) => ({ name })
+const user = new User({ name: 'Jon', lastname: 'Snow' })
+
+mutate(user, pluckName, {
+    assign: (inputRef, values) => inputRef.set(values),
+    exclude: (inputRef, keys) => keys.forEach(name => {
+        inputRef.set(name, undefined)
+    })
+})
+```
+
 ## Testing
 
 ```

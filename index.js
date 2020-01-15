@@ -1,10 +1,29 @@
 const difference = require('lodash.difference')
 
 /**
+ * @typedef MutatorOps
+ * @property {Function} assign
+ * @property {Function} exclude
+ */
+
+/**
  * @callback NonPureFn
- * @param {Object} object
+ * @param {Object} inputRef
+ * @param {MutatorOps} [mutatorOps]
  * @return {void}
  */
+
+/** @type {MutatorOps} */
+const defaultMutatorOps = {
+  assign: (inputRef, values) => {
+    Object.assign(inputRef, values)
+  },
+  exclude: (inputRef, keys) => {
+    keys.forEach((name) => {
+      delete inputRef[name]
+    })
+  }
+}
 
 /**
  * Creates a non-pure function from given pure function
@@ -14,30 +33,34 @@ const difference = require('lodash.difference')
  * the results will be merged back to the input object.
  *
  * @param {Function} fn
+ * @param {MutatorOps} [mutatorOps] - the operations used to mutate the input
  * @return {NonPureFn}
  */
-function unpure (fn) {
-  return (input) => {
-    const newObject = fn({ ...input })
-    const diff = difference(Object.keys(input), Object.keys(newObject))
+function unpure (fn, mutatorOps = {}) {
+  const {
+    assign = defaultMutatorOps.assign,
+    exclude = defaultMutatorOps.exclude
+  } = mutatorOps
 
-    Object.assign(input, newObject)
+  return (inputRef) => {
+    const newObject = fn({ ...inputRef })
+    const diff = difference(Object.keys(inputRef), Object.keys(newObject))
 
-    diff.forEach(keyName => {
-      delete input[keyName]
-    })
+    assign(inputRef, newObject)
+    exclude(inputRef, diff)
   }
 }
 
 /**
  * Mutates received object using pure function
  *
- * @param {Object} input
+ * @param {Object} inputRef
  * @param {Function} fn
+ * @param {MutatorOps} [mutatorOps] - the operations used to mutate the input
  */
-function mutate (input, fn) {
-  const updateObject = unpure(fn)
-  updateObject(input)
+function mutate (inputRef, fn, mutatorOps = {}) {
+  const updateObject = unpure(fn, mutatorOps)
+  updateObject(inputRef)
 }
 
 module.exports = {

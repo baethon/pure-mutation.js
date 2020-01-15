@@ -1,13 +1,22 @@
 declare namespace pureMutation {
-  type NonPureFn = (input: Object) => void;
+  interface MutatorOps {
+    /**
+     * Assign in-place given values to the input ref
+     */
+    assign?: (inputRef: Object, values: Object) => void;
+
+    /**
+     * Exclude in-place given keys from the input ref
+     */
+    exclude?: (inputRef: Object, keys: String[]) => void;
+  }
+
+  type NonPureFn = (input: Object, mutatorOps?: MutatorOps) => void;
 
   /**
    * Mutate input using given pure function
-   * 
-   * @param input
-   * @param using
    */
-  export function mutate(input: Object, using: Function): void;
+  export function mutate(inputRef: Object, using: Function, mutatorOps?: MutatorOps): void;
 
   /**
    * Creates a non-pure function from given pure function
@@ -15,10 +24,8 @@ declare namespace pureMutation {
    * Created function should receive an {Object} as a first argument.
    * This object will be passed to the wrapped pure function,
    * the results will be merged back to the input object.
-   *
-   * @param fn
    */
-  export function unpure(fn: Function): NonPureFn;
+  export function unpure(fn: Function, mutatorOps?: MutatorOps): NonPureFn;
 }
 
 export = pureMutation;

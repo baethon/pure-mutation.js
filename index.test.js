@@ -6,6 +6,8 @@ const { mutate, unpure } = require('.')
 chai.use(require('sinon-chai'))
 const { expect } = chai
 
+const pluckName = ({ name }) => ({ name })
+
 describe('@baethon/pure-mutation', () => {
   let user
 
@@ -47,16 +49,64 @@ describe('@baethon/pure-mutation', () => {
 
       expect(stub).to.have.been.calledWith(sinon.match((data) => data !== user))
     })
+
+    describe('mutatorOps', () => {
+      it('allows to pass assign fn', () => {
+        mutate(user, pluckName, {
+          assign: (inputRef, values) => {
+            inputRef.values = values
+          }
+        })
+
+        expect(user.values).to.eql({ name: 'Jon' })
+      })
+
+      it('allows to pass exclude fn', () => {
+        mutate(user, pluckName, {
+          exclude: (inputRef, keys) => {
+            inputRef.values = keys
+          }
+        })
+
+        expect(user.values).to.eql(['lastname', 'familyName'])
+      })
+    })
   })
 
   describe('unpure()', () => {
     it('converts pure function to non-pure function', () => {
-      const fn = unpure(({ name }) => ({ name }))
+      const fn = unpure(pluckName)
 
       fn(user)
 
       expect(user).to.eql({
         name: 'Jon'
+      })
+    })
+
+    describe('mutatorOps', () => {
+      it('allows to pass assign fn', () => {
+        const fn = unpure(pluckName, {
+          assign: (inputRef, values) => {
+            inputRef.values = values
+          }
+        })
+
+        fn(user)
+
+        expect(user.values).to.eql({ name: 'Jon' })
+      })
+
+      it('allows to pass exclude fn', () => {
+        const fn = unpure(pluckName, {
+          exclude: (inputRef, keys) => {
+            inputRef.values = keys
+          }
+        })
+
+        fn(user)
+
+        expect(user.values).to.eql(['lastname', 'familyName'])
       })
     })
   })

@@ -1,6 +1,6 @@
 {
   "name": "@baethon/pure-mutation",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Mutate object using pure functions",
   "main": "index.js",
   "repository": "https://github.com/baethon/pure-mutation.js",
